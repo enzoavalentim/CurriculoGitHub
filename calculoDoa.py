@@ -3,25 +3,24 @@ from collections import defaultdict
 import math
 from datetime import datetime
 
-caminhoRepo = "./gitClones/JExpert2.0"  
-devAlvo = "johnatan-si"
+caminhoRepo = "./gitClones/Android-MaterialRefreshLayout"  
+devAlvo = "929178101@qq.com"
 
 repo = Repo(caminhoRepo)
 commits = list(repo.iter_commits()) # Obtém todos os commits do repositório
 arquivoCommits = defaultdict(list) #Armazena todos os arquivos de um determinado repositório, com seus commits e informações de cada commit
 
 
-for commit in reversed(commits): 
+for commit in reversed(commits):
     author_name = commit.author.name
-    author_email = commit.author.email
+    author_email = commit.author.email  # Já existe no código original
     commit_date = datetime.fromtimestamp(commit.committed_date)
 
     for file in commit.stats.files:
-        arquivo = file
-        arquivoCommits[arquivo].append({
+        arquivoCommits[file].append({
             'commit': commit,
             'autor_nome': author_name,
-            'autor_login': author_name,  
+            'autor_login': author_email,  # Alterado para usar o e-mail
             'data': commit_date
         })
 
