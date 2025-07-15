@@ -1,5 +1,5 @@
 AquiteturaDoProjeto.odt
-gitClones 
+gitClonesTestes
 graficosCommits
 graficosLoc
 graficosImports 
@@ -7,4 +7,5 @@ AnotacoesCalculoDeAutoria.odt
 DOACalculator.java
 logicaCalculoDoa.md
 codigosAntigos
+limpagitclone.py 
 __pycache__

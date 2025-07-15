@@ -178,3 +178,29 @@ class UserData:
             'top_languages': self.top_languages_data['top_languages'],
             'repos_by_language': top5_repos_language
         }
+    
+    def cloningRepos(self, github_token: str, username: str):
+
+        CLONE_DIR = "gitClones"
+        
+        if os.path.exists(CLONE_DIR):
+            shutil.rmtree(CLONE_DIR)
+        os.makedirs(CLONE_DIR, exist_ok=True)
+
+        g = Github(github_token)
+        user = g.get_user(username)
+
+        allowedLanguages = {'Java', 'JavaScript', 'Python', 'C', 'C++', 'C#'}
+
+        for repo in user.get_repos():
+            try:
+                local_path = os.path.join(CLONE_DIR, repo.name)
+                language = repo.language or "Unknown"
+
+                if not os.path.exists(local_path):
+                    if language in allowedLanguages:
+                        git.Repo.clone_from(repo.clone_url, local_path)
+        
+            except Exception as e:
+                print(f"❌ Failed to clone {repo.name}: {e}")
+        print("Todas reposClonados com sucesso!")
