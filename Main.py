@@ -1,5 +1,4 @@
 from userData import UserData
-
 from github import Github
 from collections import Counter, defaultdict
 from pydriller import Repository
@@ -16,15 +15,17 @@ class Main:
     userName = 'johnatan-si'
     user = g.get_user(userName)
     profilePicture = user.avatar_url
-    email = UserData.getEmail(userName=user.login, GitToken=GITHUB_TOKEN)
 
-    TargetDev = UserData( name=user.login, email=email or "email@nao-encontrado.com", photo=profilePicture)
-    TargetDev.cloningRepos(GITHUB_TOKEN, userName)
+    targetDev = UserData(name=user.login, email=None, photo=profilePicture)
+    targetDev.getEmail(userName=user.login, GitToken=GITHUB_TOKEN)
+
+    print(f"Nome: {targetDev.name}")
+    print(f"E-mail: {targetDev.email}")
+    print(f"Foto: {targetDev.photo}")
+
+
+    #TargetDev.cloningRepos(GITHUB_TOKEN, userName)
     
-
-    #print(f"Nome: {targetDev.name}")
-    #print(f"E-mail: {targetDev.email}")
-    #print(f"Foto: {targetDev.photo}")
 
     
     
