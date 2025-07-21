@@ -19,12 +19,17 @@ class Main:
     targetDev = UserData(name=user.login, email=None, photo=profilePicture)
     targetDev.getEmail(userName=user.login, GitToken=GITHUB_TOKEN)
 
+    targetDev.cloningRepos(GITHUB_TOKEN, userName)
+    
+    targetDev.calcDOA(str(targetDev.email[0]))
+
     print(f"Nome: {targetDev.name}")
     print(f"E-mail: {targetDev.email}")
     print(f"Foto: {targetDev.photo}")
 
 
-    #TargetDev.cloningRepos(GITHUB_TOKEN, userName)
+
+
     
 
     
