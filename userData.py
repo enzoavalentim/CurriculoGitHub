@@ -218,7 +218,7 @@ class UserData:
             nome_repo = os.path.basename(repo_path)
             resultados[nome_repo] = arquivosAutoriaAlvo
 
-        
+        repoAnalisado = 0
         for repo, arquivos in resultados.items():
             if arquivos:
                 wb = Workbook()
@@ -234,7 +234,9 @@ class UserData:
                 caminho_saida = os.path.join("./tablesDoa", nome_arquivo)
                 wb.save(caminho_saida)
                 print(f"Arquivo Excel criado: {caminho_saida}")
+                repoAnalisado += 1
             else:
                 print(f"Nenhum arquivo de autoria principal para {dev_email} no repositório {repo}.")
 
+        print(f"Total de repositórios analisados com arquivos de autoria principal: {repoAnalisado}/{len(resultados)} ")
         return resultados  
