@@ -11,6 +11,8 @@ from openpyxl import Workbook
 import math
 from datetime import datetime
 from git import Repo
+from pathlib import Path
+import pandas as pd
 
 class UserData:
     def __init__(self, name, email, photo):
@@ -240,3 +242,29 @@ class UserData:
 
         print(f"Total de repositórios analisados com arquivos de autoria principal: {repoAnalisado}/{len(resultados)} ")
         return resultados  
+
+
+    @staticmethod
+    def filtroArquivos():
+        folderPath = Path("./tablesDoa")
+        fixos = ['.java', '.py', '.js', '.c', '.cpp', '.cs']
+
+        for arquivo in folderPath.iterdir():  # Para cada arquivo na pasta
+
+            if arquivo.suffix not in ['.xlsx', '.xls']:  
+                continue
+
+            df = pd.read_excel(arquivo)
+
+            if 'Arquivo' not in df.columns:
+                print(f"Coluna 'Arquivo' não encontrada em {arquivo.name}")
+                continue
+
+            filtro = df['Arquivo'].astype(str).apply(lambda x: any(x.endswith(suf) for suf in fixos))
+            df_filtrado = df[filtro]
+
+            df_filtrado.to_excel(arquivo, index=False)
+
+            print(f"Arquivo processado: {arquivo.name} — {len(df) - len(df_filtrado)} linha(s) removida(s)")
+
+
