@@ -232,7 +232,7 @@ class UserData:
                 for arq in arquivos:
                     ws.append([arq])
 
-                nome_arquivo = f"{repo}_DOA.xlsx"
+                nome_arquivo = f"{repo}.xlsx"
                 caminho_saida = os.path.join("./tablesDoa", nome_arquivo)
                 wb.save(caminho_saida)
                 print(f"Arquivo Excel criado: {caminho_saida}")
@@ -267,4 +267,39 @@ class UserData:
 
             print(f"Arquivo processado: {arquivo.name} — {len(df) - len(df_filtrado)} linha(s) removida(s)")
 
+    
+    @staticmethod
+    def captureImports():
+        folderPath = Path("./tablesDoa")
+
+        for tabela_path in folderPath.iterdir():
+            df = pd.read_excel(tabela_path)  # Lê a planilha
+            df['Imports'] = ""
+
+            repo_name = tabela_path.stem  # Nome do repositório (sem .xlsx)
+
+            for index, row in df.iterrows():
+
+                linha = row['Arquivo']
+
+                arquivoAnalise = Path(f"gitClones/{repo_name}/{linha}")
+
+                importsEncontrados = []
+
+                try:
+                    with open(arquivoAnalise, 'r', encoding='utf-8') as arquivo:
+                        for line in arquivo:
+                            linha_limpa = line.strip()
+                            if linha_limpa.startswith(("(", "import", "from", "#include", "include")):
+                                importsEncontrados.append(linha_limpa)
+                except FileNotFoundError:
+                    print(f"[AVISO] Arquivo não encontrado: {arquivoAnalise}")
+                    importsEncontrados = ["ARQUIVO NAO ENCONTRADO"]
+
+                df.at[index, 'Imports'] = '\n'.join(importsEncontrados)
+
+            df.to_excel(tabela_path, index=False)
+
+
+        
 

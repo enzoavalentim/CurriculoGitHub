@@ -22,6 +22,8 @@ class Main:
     targetDev.cloningRepos(GITHUB_TOKEN, userName)
     
     targetDev.calcDOA(str(targetDev.email[0]))
+    targetDev.filtroArquivos()
+    targetDev.captureImports()
 
     print(f"Nome: {targetDev.name}")
     print(f"E-mail: {targetDev.email}")
