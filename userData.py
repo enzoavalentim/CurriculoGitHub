@@ -2,6 +2,7 @@ import requests
 from github import Github
 from collections import Counter, defaultdict
 from pydriller import Repository
+from pydriller.metrics.process.lines_count import LinesCount
 import os
 import git
 import shutil
@@ -13,6 +14,7 @@ from datetime import datetime
 from git import Repo
 from pathlib import Path
 import pandas as pd
+from datetime import datetime
 
 
 class UserData:
@@ -38,6 +40,32 @@ class UserData:
         
         return emails_unicos
 
+
+
+    def getLinesAddRemov(self):
+        listaRepos = self.createRepoList()
+
+        for repo_dict in listaRepos:
+            repoPath = f"./gitClones/{repo_dict['nome']}"
+            linhas_adicionadas = 0
+            linhas_removidas = 0
+
+            try:
+                    for commit in Repository(repoPath).traverse_commits():
+                        if commit.author.email == 'johnatan-si@hotmail.com':
+                                linhas_adicionadas += commit.insertions
+                                linhas_removidas += commit.deletions
+   
+                    repo_dict['linhaAdd'] = linhas_adicionadas
+                    repo_dict['linhaRemov'] = linhas_removidas
+
+            except Exception as e:
+                    print(f"Erro ao abrir o repositório em {repoPath}: {e}")
+
+        self.linesAddRemov = listaRepos
+
+
+
     
     @staticmethod
     def createRepoList():
@@ -55,7 +83,6 @@ class UserData:
                     'linhaRemov': None
                 }
                 lista_repositorios.append(repo_info)
-            print(lista_repositorios)
 
         return lista_repositorios
     
