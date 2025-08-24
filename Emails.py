@@ -115,5 +115,5 @@ class Emails:
     def criandoListaEmaisls(userName): 
 
         df = pd.read_csv(f"emails{userName}.csv")
-        emails_unicos = df["autor_email"].unique().tolist()
-        return emails_unicos
+        emailsUniicos = df["autor_email"].unique().tolist()
+        return emailsUniicos
