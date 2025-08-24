@@ -24,24 +24,6 @@ class UserData:
         self.photo = photo
         self.linesAddRemov= None  
 
-    def getEmail(self, userName, GitToken):
-        user = userName
-        g = GitToken
-        caminhoEmailFinder = "github-email-finder"
-        comando = f"python3 script.py {user} --token {g}"
-        resultado = subprocess.run(comando, shell=True, capture_output=True, text=True, cwd=caminhoEmailFinder)
-
-        saida = resultado.stdout
-        
-        padrao_email = r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+"
-        emails = re.findall(padrao_email, saida)
-        emails_unicos = list(set(emails))
-        self.email = emails_unicos
-        
-        return emails_unicos
-
-
-
     def getLinesAddRemov(self):
         listaRepos = self.createRepoList()
 
@@ -65,8 +47,6 @@ class UserData:
         self.linesAddRemov = listaRepos
 
 
-
-    
     @staticmethod
     def createRepoList():
 
@@ -122,7 +102,7 @@ class UserData:
 
 
     def calcDOA(self, dev_email: str):
-        caminho_base = "./gitClones"
+        caminho_base = "gitClones"
         
         repositorios = [os.path.join(caminho_base, d) for d in os.listdir(caminho_base)
                         if os.path.isdir(os.path.join(caminho_base, d))]
@@ -222,7 +202,7 @@ class UserData:
         folderPath = Path("./tablesDoa")
         fixos = ['.java', '.py', '.js', '.c', '.cpp', '.cs']
 
-        for arquivo in folderPath.iterdir():  # Para cada arquivo na pasta
+        for arquivo in folderPath.iterdir():  
 
             if arquivo.suffix not in ['.xlsx', '.xls']:  
                 continue
@@ -246,10 +226,9 @@ class UserData:
         folderPath = Path("./tablesDoa")
 
         for tabela_path in folderPath.iterdir():
-            df = pd.read_excel(tabela_path)  # Lê a planilha
+            df = pd.read_excel(tabela_path)  
             df['Imports'] = ""
 
-            repo_name = tabela_path.stem  # Nome do repositório (sem .xlsx)
 
             for index, row in df.iterrows():
 
