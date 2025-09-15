@@ -1,35 +1,53 @@
 from userData import UserData
+from Emails import Emails   
 from github import Github
-from collections import Counter, defaultdict
-from pydriller import Repository
-import os
-import git  
-import shutil
-import matplotlib.pyplot as plt
-import os
+from CalcDOA import DOACalculator  
 
 class Main:
 
     GITHUB_TOKEN = ""
     g = Github(GITHUB_TOKEN)
     userName = 'johnatan-si'
+
+
     user = g.get_user(userName)
+    print(user)
     profilePicture = user.avatar_url
+    displayName = user.name
+    print(displayName)
 
     targetDev = UserData(name=user.login, email=None, photo=profilePicture)
-    targetDev.getEmail(userName=user.login, GitToken=GITHUB_TOKEN)
 
     targetDev.cloningRepos(GITHUB_TOKEN, userName)
+
+    Emails.listCommits()
+    Emails.catchEmails(userNamex=user.login, displayNamex=displayName)
+    targetDev.email = Emails.criandoListaEmaisls(userName=user.login)
+
+    print(f"E-mails capturados: {targetDev.email}")
     
-    targetDev.calcDOA(str(targetDev.email[0]))
-    targetDev.filtroArquivos()
-    targetDev.captureImports()
-
-    print(f"Nome: {targetDev.name}")
-    print(f"E-mail: {targetDev.email}")
-    print(f"Foto: {targetDev.photo}")
+    doa_calc = DOACalculator(base_path="gitClones", output_path="./tablesDoa")
+    resultados = doa_calc.calc_doa(targetDev.email)   
 
 
+    
+   # targetDev.calcDOA(str(targetDev.email[0])) # ALTERAR METODO
+   # targetDev.filtroArquivos()
+  #  targetDev.captureImports()
+   # targetDev.getLinesAddRemov()
+   ## for repo in targetDev.linesAddRemov:
+     #   print(f"Nome do Repositório: {repo['nome']}")
+      #  print(f"Linhas Adicionadas: {repo['linhaAdd']}")
+       # print(f"Linhas Removidas: {repo['linhaRemov']}")
+        #print("-" * 40)
+        
+    #print("-" * 40)
+    #print(f"Nome: {targetDev.name}")
+    #print(f"E-mail: {targetDev.email}")
+    #print(f"Foto: {targetDev.photo}")
+    
+
+    
 
 
     

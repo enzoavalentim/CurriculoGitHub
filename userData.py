@@ -46,7 +46,7 @@ class UserData:
 
         self.linesAddRemov = listaRepos
 
-
+    
     @staticmethod
     def createRepoList():
 
@@ -121,14 +121,14 @@ class UserData:
 
             for commit in reversed(commits):
                 author_name = commit.author.name
-                author_login = commit.author.email
+                author_email = commit.author.email
                 commit_date = datetime.fromtimestamp(commit.committed_date)
 
                 for file in commit.stats.files:
                     arquivoCommits[file].append({
                         'commit': commit,
                         'autor_nome': author_name,
-                        'autor_login': author_login,
+                        'autor_login': author_email,
                         'data': commit_date
                     })
 
@@ -202,7 +202,7 @@ class UserData:
         folderPath = Path("./tablesDoa")
         fixos = ['.java', '.py', '.js', '.c', '.cpp', '.cs']
 
-        for arquivo in folderPath.iterdir():  
+        for arquivo in folderPath.iterdir():  # Para cada arquivo na pasta
 
             if arquivo.suffix not in ['.xlsx', '.xls']:  
                 continue
@@ -229,6 +229,7 @@ class UserData:
             df = pd.read_excel(tabela_path)  
             df['Imports'] = ""
 
+            repo_name = tabela_path.stem  
 
             for index, row in df.iterrows():
 
