@@ -15,6 +15,7 @@ from git import Repo
 from pathlib import Path
 import pandas as pd
 from datetime import datetime
+from charset_normalizer import from_path
 
 
 class UserData:
@@ -98,104 +99,6 @@ class UserData:
             except Exception as e:
                 print(f"❌ Failed to clone {repo.name}: {e}")
         print("Todas reposClonados com sucesso!")
-    
-
-
-    def calcDOA(self, dev_email: str):
-        caminho_base = "gitClones"
-        
-        repositorios = [os.path.join(caminho_base, d) for d in os.listdir(caminho_base)
-                        if os.path.isdir(os.path.join(caminho_base, d))]
-
-        resultados = {}  
-
-        for repo_path in repositorios:
-            try:
-                repo = Repo(repo_path)
-            except Exception as e:
-                print(f"Erro ao abrir o repositório em {repo_path}: {e}")
-                continue
-
-            commits = list(repo.iter_commits())
-            arquivoCommits = defaultdict(list)
-
-            for commit in reversed(commits):
-                author_name = commit.author.name
-                author_email = commit.author.email
-                commit_date = datetime.fromtimestamp(commit.committed_date)
-
-                for file in commit.stats.files:
-                    arquivoCommits[file].append({
-                        'commit': commit,
-                        'autor_nome': author_name,
-                        'autor_login': author_email,
-                        'data': commit_date
-                    })
-
-            arquivosAutoriaAlvo = []
-
-            for arquivo, commits_info in arquivoCommits.items():
-                ordered_commits = sorted(commits_info, key=lambda x: x['data'])
-                dev_stats = defaultdict(lambda: {'FA': 0, 'DL': 0, 'AC': 0})
-
-                primeiro_commit = ordered_commits[0]
-                primeiro_autor = primeiro_commit['autor_login']
-                dev_stats[primeiro_autor]['FA'] = 1
-                dev_stats[primeiro_autor]['DL'] += 1
-
-                for commit_info in ordered_commits[1:]:
-                    autor = commit_info['autor_login']
-                    dev_stats[autor]['DL'] += 1
-
-                for dev in dev_stats:
-                    outros_devs = [d for d in dev_stats if d != dev]
-                    dev_stats[dev]['AC'] = sum(dev_stats[d]['DL'] for d in outros_devs)
-
-                dev_doa = {}
-                for dev, stats in dev_stats.items():
-                    FA = stats['FA']
-                    DL = stats['DL']
-                    AC = stats['AC']
-                    doa = 3.293 + 1.098 * FA + 0.164 * DL - 0.321 * math.log(1 + AC)
-                    dev_doa[dev] = doa
-
-                doa_max = max(dev_doa.values())
-                doa_normalizado = {dev: val / doa_max for dev, val in dev_doa.items()}
-
-                if dev_email in dev_doa:
-                    if (
-                        dev_doa[dev_email] == doa_max and
-                        dev_doa[dev_email] >= 3.293 and
-                        doa_normalizado[dev_email] >= 0.75
-                    ):
-                        arquivosAutoriaAlvo.append(arquivo)
-
-            nome_repo = os.path.basename(repo_path)
-            resultados[nome_repo] = arquivosAutoriaAlvo
-
-        repoAnalisado = 0
-        for repo, arquivos in resultados.items():
-            if arquivos:
-                wb = Workbook()
-                ws = wb.active
-                ws.title = "Arquivos DOA"
-
-                ws.append(["Arquivo"])
-
-                for arq in arquivos:
-                    ws.append([arq])
-
-                nome_arquivo = f"{repo}.xlsx"
-                caminho_saida = os.path.join("./tablesDoa", nome_arquivo)
-                wb.save(caminho_saida)
-                print(f"Arquivo Excel criado: {caminho_saida}")
-                repoAnalisado += 1
-            else:
-                print(f"Nenhum arquivo de autoria principal para {dev_email} no repositório {repo}.")
-
-        print(f"Total de repositórios analisados com arquivos de autoria principal: {repoAnalisado}/{len(resultados)} ")
-        return resultados  
-
 
     @staticmethod
     def filtroArquivos():
@@ -218,36 +121,55 @@ class UserData:
 
             df_filtrado.to_excel(arquivo, index=False)
 
-            print(f"Arquivo processado: {arquivo.name} — {len(df) - len(df_filtrado)} linha(s) removida(s)")
+            #print(f"Arquivo processado: {arquivo.name} — {len(df) - len(df_filtrado)} linha(s) removida(s)")
 
     
+
+
     @staticmethod
     def captureImports():
         folderPath = Path("./tablesDoa")
 
         for tabela_path in folderPath.iterdir():
-            df = pd.read_excel(tabela_path)  
-            df['Imports'] = ""
+            if not tabela_path.name.endswith((".xlsx", ".xls")):
+                continue
 
-            repo_name = tabela_path.stem  
+            df = pd.read_excel(tabela_path)
+            df['Imports'] = ""
+            repo_name = tabela_path.stem
 
             for index, row in df.iterrows():
-
                 linha = row['Arquivo']
-
                 arquivoAnalise = Path(f"gitClones/{repo_name}/{linha}")
 
                 importsEncontrados = []
 
                 try:
-                    with open(arquivoAnalise, 'r', encoding='utf-8') as arquivo:
+                    # Detecta automaticamente a codificação
+                    detected = from_path(arquivoAnalise).best()
+                    if not detected:
+                        raise UnicodeError("Não foi possível detectar a codificação.")
+                    encoding_detectada = detected.encoding
+
+                    with open(arquivoAnalise, 'r', encoding=encoding_detectada, errors='ignore') as arquivo:
                         for line in arquivo:
                             linha_limpa = line.strip()
-                            if linha_limpa.startswith(("(", "import", "from", "#include", "include")):
+
+                            # ignora comentários
+                            if linha_limpa.startswith(("//", "/*", "*", "#")):
+                                continue
+
+                            # captura imports Python, Java, C/C++, e C#
+                            if linha_limpa.startswith(("import ", "from ", "using ", "#include ", "include ")):
                                 importsEncontrados.append(linha_limpa)
+
                 except FileNotFoundError:
                     print(f"[AVISO] Arquivo não encontrado: {arquivoAnalise}")
                     importsEncontrados = ["ARQUIVO NAO ENCONTRADO"]
+
+                except Exception as e:
+                    print(f"[ERRO] Falha ao processar {arquivoAnalise}: {e}")
+                    importsEncontrados = ["ERRO AO LER ARQUIVO"]
 
                 df.at[index, 'Imports'] = '\n'.join(importsEncontrados)
 

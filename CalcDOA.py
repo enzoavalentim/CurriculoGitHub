@@ -102,12 +102,12 @@ class DOACalculator:
                         doa_normalizado[email] >= 0.75
                     ):
                         arquivosAutoriaAlvo.append(arquivo)
-                        break  # já encontrou um email válido, não precisa checar os outros
+                        break  
 
         return arquivosAutoriaAlvo
 
     def save_to_excel(self, repo_name, arquivos):
-        """Salva arquivos de autoria em uma planilha Excel."""
+
         if not arquivos:
             return False
 
@@ -123,7 +123,7 @@ class DOACalculator:
         caminho_saida = os.path.join(self.output_path, nome_arquivo)
         os.makedirs(self.output_path, exist_ok=True)
         wb.save(caminho_saida)
-        print(f"Arquivo Excel criado: {caminho_saida}")
+        #print(f"Arquivo Excel criado: {caminho_saida}")
         return True
 
     def calc_doa(self, dev_email):
@@ -141,8 +141,9 @@ class DOACalculator:
 
             if self.save_to_excel(nome_repo, arquivosAutoriaAlvo):
                 repoAnalisado += 1
-            else:
-                print(f"Nenhum arquivo de autoria principal para {dev_email} no repositório {nome_repo}.")
+            #else:
+                #print(f"Nenhum arquivo de autoria principal para {dev_email} no repositório {nome_repo}.")
+
 
         print(f"Total de repositórios analisados com arquivos de autoria principal: {repoAnalisado}/{len(resultados)}")
         return resultados

@@ -89,15 +89,10 @@ class Emails:
                     score_userNameXCommitName = fuzz.ratio(userName, commitName)
                     score_displayNameXEmail = fuzz.ratio(displayName, commitEmail)
                     score_displayNameXCommitName = fuzz.ratio(displayName, commitName)
-
-                    #if score_userNameXEmail >= 43.47:
-                    # linhas_filtradas.append(linha)
                     
                     if score_userNameXCommitName >= 72.0:
                         linhas_filtradas.append(linha)
 
-                    #if score_displayNameXEmail >= 45.3:
-                    # linhas_filtradas.append(linha)
                     
                     if score_displayNameXCommitName >= 70.89:
                         linhas_filtradas.append(linha)
@@ -116,4 +111,5 @@ class Emails:
 
         df = pd.read_csv(f"emails{userName}.csv")
         emailsUniicos = df["autor_email"].unique().tolist()
+        os.remove(f"emails{userName}.csv")
         return emailsUniicos

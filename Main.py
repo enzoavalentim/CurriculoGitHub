@@ -23,28 +23,24 @@ class Main:
     Emails.listCommits()
     Emails.catchEmails(userNamex=user.login, displayNamex=displayName)
     targetDev.email = Emails.criandoListaEmaisls(userName=user.login)
-
     print(f"E-mails capturados: {targetDev.email}")
     
     doa_calc = DOACalculator(base_path="gitClones", output_path="./tablesDoa")
     resultados = doa_calc.calc_doa(targetDev.email)   
-
-
+    targetDev.filtroArquivos()
     
-   # targetDev.calcDOA(str(targetDev.email[0])) # ALTERAR METODO
-   # targetDev.filtroArquivos()
-  #  targetDev.captureImports()
-   # targetDev.getLinesAddRemov()
-   ## for repo in targetDev.linesAddRemov:
-     #   print(f"Nome do Repositório: {repo['nome']}")
-      #  print(f"Linhas Adicionadas: {repo['linhaAdd']}")
-       # print(f"Linhas Removidas: {repo['linhaRemov']}")
-        #print("-" * 40)
+    targetDev.captureImports()
+    targetDev.getLinesAddRemov()
+    for repo in targetDev.linesAddRemov:
+        print(f"Nome do Repositório: {repo['nome']}")
+        print(f"Linhas Adicionadas: {repo['linhaAdd']}")
+        print(f"Linhas Removidas: {repo['linhaRemov']}")
+        print("-" * 40)
         
-    #print("-" * 40)
-    #print(f"Nome: {targetDev.name}")
-    #print(f"E-mail: {targetDev.email}")
-    #print(f"Foto: {targetDev.photo}")
+    print("-" * 40)
+    print(f"Nome: {targetDev.name}")
+    print(f"E-mail: {targetDev.email}")
+    print(f"Foto: {targetDev.photo}")
     
 
     
