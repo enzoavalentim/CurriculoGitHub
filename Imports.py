@@ -2,7 +2,6 @@ import os
 import shutil
 from pathlib import Path
 import pandas as pd
-import csv 
 
 class Imports:
 
@@ -53,4 +52,21 @@ class Imports:
         tabelaCPP.to_excel("importTables/CPP.xlsx", index=False)
         tabelaCS.to_excel("importTables/CS.xlsx", index=False)
 
+    @staticmethod
+    def uniqueImports():
+ 
+        folder = Path('importTables')
         
+        for arquivo_path in folder.iterdir():
+            if arquivo_path.suffix.lower() in ['.xlsx', '.xls']:
+                df = pd.read_excel(arquivo_path)
+                
+                if 'Imports' in df.columns:
+                    df = df[df['Imports'].notna()]        
+                    df = df[df['Imports'].str.strip() != '']  
+                    df = df.drop_duplicates(subset=['Imports']).reset_index(drop=True)
+                    
+                    df.to_excel(arquivo_path, index=False)
+                    print(f"Arquivo processado: {arquivo_path.name}")
+                else:
+                    print(f"A coluna 'Imports' não existe em {arquivo_path.name}")
