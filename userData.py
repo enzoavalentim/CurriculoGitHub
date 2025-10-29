@@ -6,10 +6,7 @@ from pydriller.metrics.process.lines_count import LinesCount
 import os
 import git
 import shutil
-import subprocess
-import re
 from openpyxl import Workbook
-import math
 from datetime import datetime
 from git import Repo
 from pathlib import Path
@@ -24,6 +21,7 @@ class UserData:
         self.email = email
         self.photo = photo
         self.linesAddRemov= None  
+        self.mainLang = None
 
     def getLinesAddRemov(self):
         listaRepos = self.createRepoList()
@@ -35,7 +33,7 @@ class UserData:
 
             try:
                     for commit in Repository(repoPath).traverse_commits():
-                        if commit.author.email == 'johnatan-si@hotmail.com':
+                        if commit.author.email in self.email:
                                 linhas_adicionadas += commit.insertions
                                 linhas_removidas += commit.deletions
    
@@ -145,7 +143,6 @@ class UserData:
                 importsEncontrados = []
 
                 try:
-                    # Detecta automaticamente a codificação
                     detected = from_path(arquivoAnalise).best()
                     if not detected:
                         raise UnicodeError("Não foi possível detectar a codificação.")
@@ -154,12 +151,9 @@ class UserData:
                     with open(arquivoAnalise, 'r', encoding=encoding_detectada, errors='ignore') as arquivo:
                         for line in arquivo:
                             linha_limpa = line.strip()
-
-                            # ignora comentários
                             if linha_limpa.startswith(("//", "/*", "*", "#")):
                                 continue
 
-                            # captura imports Python, Java, C/C++, e C#
                             if linha_limpa.startswith(("import ", "from ", "using ", "#include ", "include ")):
                                 importsEncontrados.append(linha_limpa)
 
@@ -175,6 +169,60 @@ class UserData:
 
             df.to_excel(tabela_path, index=False)
 
+    def mainLanguage(self):
+        #Definindo linguagem principal com base em em numero de arquivos de autoria em cada linguagem 
+
+        Java = 0
+        Python = 0
+        JavaScript = 0
+        C = 0       
+        Cpp = 0
+        CSharp = 0
+
+        folderPath = Path("./tablesDoa")
+
+        for tabela_path in folderPath.iterdir():
+            if not tabela_path.name.endswith((".xlsx", ".xls")):
+                continue
+
+            df = pd.read_excel(tabela_path)
+            df['Imports'] = ""
+            repo_name = tabela_path.stem
+
+            for index, row in df.iterrows():
+                linha = row['Arquivo']
+                
+                if linha.endswith('.java'):
+                    Java += 1
+                elif linha.endswith('.py'):
+                    Python += 1
+                elif linha.endswith('.js'):
+                    JavaScript += 1
+                elif linha.endswith('.c'):
+                    C += 1
+                elif linha.endswith('.cpp'):
+                    Cpp += 1
+                elif linha.endswith('.cs'):
+                    CSharp += 1
+
+        print(f"Contagem de arquivos por linguagem:")
+        print(f"Java: {Java}")
+        print(f"Python: {Python}")      
+        print(f"JavaScript: {JavaScript}")
+        print(f"C: {C}")
+        print(f"C++: {Cpp}")
+        print(f"C#: {CSharp}")
+        
+        listaLang = {
+            'Java': Java,
+            'Python': Python,
+            'JavaScript': JavaScript,
+            'C': C,
+            'C++': Cpp,
+            'C#': CSharp
+        }
+        mainLang = max(listaLang, key=listaLang.get)
+        self.mainLang = mainLang
+        return
 
         
-
