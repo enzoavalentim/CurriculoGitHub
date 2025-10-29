@@ -53,8 +53,8 @@ class Emails:
     def catchEmails(userNamex, displayNamex): 
 
 
-        userName = userNamex.lower()  #base1
-        displayName = displayNamex.lower() #base2
+        userName = userNamex  #base1 Comentar .lower()
+        displayName = displayNamex #base2 Comentar .lower()
 
 
         pasta = 'tablesEmails'

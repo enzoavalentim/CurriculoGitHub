@@ -23,8 +23,8 @@ class UserData:
         self.linesAddRemov= None  
         self.mainLang = None
 
-    def getLinesAddRemov(self):
-        listaRepos = self.createRepoList()
+    def getLinesAddRemov(self, github_token: str):
+        listaRepos = self.createRepoList(username=self.name, github_token=github_token)
 
         for repo_dict in listaRepos:
             repoPath = f"./gitClones/{repo_dict['nome']}"
@@ -47,23 +47,39 @@ class UserData:
 
     
     @staticmethod
-    def createRepoList():
+    def createRepoList(username, github_token):
 
         repoPath = "./gitClones"
         lista_repositorios = []
 
-        for nome in os.listdir(repoPath):
-            caminho_completo = os.path.join(repoPath, nome)
 
-            if os.path.isdir(caminho_completo) and os.path.isdir(os.path.join(caminho_completo, '.git')):
-                repo_info = {
-                    'nome': nome,
-                    'linhaAdd': None,     
-                    'linhaRemov': None
-                }
-                lista_repositorios.append(repo_info)
+        g = Github(github_token)
+        user = g.get_user(username)
+
+        allowedLanguages = {'Java', 'JavaScript', 'Python', 'C', 'C++', 'C#'}
+
+        repo_names = set() 
+
+        for repo in user.get_repos():
+            try:
+                language = repo.language or "Unknown"
+                if language in allowedLanguages and repo.name not in repo_names:
+                    repo_info = {
+                        'nome': repo.name,
+                        'linhaAdd': None,
+                        'linhaRemov': None,
+                        'linguagem': language
+                    }
+                    lista_repositorios.append(repo_info)
+                    repo_names.add(repo.name)
+            except Exception as e:
+                print(f"❌ Failed to process {repo.name}: {e}")
+
 
         return lista_repositorios
+    
+
+
     
 
     
@@ -187,7 +203,6 @@ class UserData:
 
             df = pd.read_excel(tabela_path)
             df['Imports'] = ""
-            repo_name = tabela_path.stem
 
             for index, row in df.iterrows():
                 linha = row['Arquivo']
