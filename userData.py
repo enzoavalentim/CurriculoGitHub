@@ -21,6 +21,7 @@ class UserData:
         self.email = email
         self.photo = photo
         self.linesAddRemov= None  
+        self.totalCommits = None
         self.mainLang = None
 
     def getLinesAddRemov(self, github_token: str):
@@ -44,6 +45,29 @@ class UserData:
                     print(f"Erro ao abrir o repositório em {repoPath}: {e}")
 
         self.linesAddRemov = listaRepos
+    
+    def getCommitsByLanguage(self, github_token: str):
+
+        linguagens = ['Java', 'JavaScript', 'Python', 'C', 'C++', 'C#']
+        commits_por_linguagem = {lang: 0 for lang in linguagens}
+
+        for repo_dict in self.linesAddRemov:
+            repoPath = f"./gitClones/{repo_dict['nome']}"
+            linguagem_repo = repo_dict['linguagem']
+
+            try:
+                for commit in Repository(repoPath).traverse_commits():
+                    if commit.author and commit.author.email in self.email:
+                        commits_por_linguagem[linguagem_repo] += 1
+
+            except Exception as e:
+                print(f"Erro ao abrir o repositório em {repoPath}: {e}")
+
+        self.totalCommits = [
+            {'linguagem': lang, 'totalCommits': total}
+            for lang, total in commits_por_linguagem.items()
+        ]
+
 
     
     @staticmethod
@@ -78,10 +102,6 @@ class UserData:
 
         return lista_repositorios
     
-
-
-    
-
     
     def cloningRepos(self, github_token: str, username: str):
 
@@ -174,7 +194,7 @@ class UserData:
                                 importsEncontrados.append(linha_limpa)
 
                 except FileNotFoundError:
-                    print(f"[AVISO] Arquivo não encontrado: {arquivoAnalise}")
+                    #print(f"[AVISO] Arquivo não encontrado: {arquivoAnalise}")
                     importsEncontrados = ["ARQUIVO NAO ENCONTRADO"]
 
                 except Exception as e:

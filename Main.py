@@ -51,3 +51,11 @@ class Main:
     Imports.SeparatesByLanguages()
     Imports.uniqueImports()
     Imports.dropStarndarLibs()
+
+    print("-=" * 40)
+    targetDev.getCommitsByLanguage(GITHUB_TOKEN)
+    print("Total de Commits por Linguagem:")
+    for lang_commit in targetDev.totalCommits:
+        print(f"Linguagem: {lang_commit['linguagem']}, Total de Commits: {lang_commit['totalCommits']}")
+
+
