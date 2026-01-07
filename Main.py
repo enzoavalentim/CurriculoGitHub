@@ -3,6 +3,7 @@ from Emails import Emails
 from github import Github
 from CalcDOA import DOACalculator  
 from Imports import Imports
+from CreatePrompt import CreatePrompt
 import pandas as pd 
 
 class Main:
@@ -57,5 +58,8 @@ class Main:
     print("Total de Commits por Linguagem:")
     for lang_commit in targetDev.totalCommits:
         print(f"Linguagem: {lang_commit['linguagem']}, Total de Commits: {lang_commit['totalCommits']}")
+
+    CreatePrompt.generatePrompt(targetDev.mainLang, targetDev.name)
+    
 
 
