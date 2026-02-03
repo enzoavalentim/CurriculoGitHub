@@ -38,5 +38,7 @@ Skills: search algorithms, APIs, databases
 """
             with open(f"{name}-prompt.txt", "w", encoding="utf-8") as file:
                 file.write(prompt)
+
+                open(f"{name}-responsePrompt.txt", "w").close()
             return 
     
