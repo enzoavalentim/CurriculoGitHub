@@ -4,6 +4,7 @@ from github import Github
 from CalcDOA import DOACalculator  
 from Imports import Imports
 from CreatePrompt import CreatePrompt
+from CreateGraphics import CreateGraphics
 import pandas as pd 
 
 class Main:
@@ -18,10 +19,11 @@ class Main:
     profilePicture = user.avatar_url
     displayName = user.name
     print(displayName)
+    print(profilePicture)
 
     targetDev = UserData(name=user.login, email=None, photo=profilePicture)
 
-    targetDev.cloningRepos(GITHUB_TOKEN, userName)
+    #targetDev.cloningRepos(GITHUB_TOKEN, userName)
 
     Emails.listCommits()
     Emails.catchEmails(userNamex=user.login, displayNamex=displayName)
@@ -60,6 +62,10 @@ class Main:
         print(f"Linguagem: {lang_commit['linguagem']}, Total de Commits: {lang_commit['totalCommits']}")
 
     CreatePrompt.generatePrompt(targetDev.mainLang, targetDev.name)
-    
+
+
+    CreateGraphics.plotLinesByLanguage(targetDev)
+    CreateGraphics.plotCommitsByLanguage(targetDev, GITHUB_TOKEN)
+    CreateGraphics.plotAuthoringFiles(targetDev)
 
 
