@@ -23,6 +23,7 @@ class UserData:
         self.linesAddRemov= None  
         self.totalCommits = None
         self.mainLang = None
+        self.authoringFiles = None
 
     def getLinesAddRemov(self, github_token: str):
         listaRepos = self.createRepoList(username=self.name, github_token=github_token)
@@ -255,9 +256,12 @@ class UserData:
             'C': C,
             'C++': Cpp,
             'C#': CSharp
-        }
+        } 
+        
+
         mainLang = max(listaLang, key=listaLang.get)
         self.mainLang = mainLang
+        self.authoringFiles = listaLang
         return
 
         
