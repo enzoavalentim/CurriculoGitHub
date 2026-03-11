@@ -8,9 +8,9 @@ class Imports:
     @staticmethod
     def SeparatesByLanguages():
 
-        if os.path.exists("importTables"):
-            shutil.rmtree("importTables")
-        os.makedirs("importTables", exist_ok=True)
+        #if os.path.exists("importTables"):
+            #shutil.rmtree("importTables")
+        #os.makedirs("importTables", exist_ok=True)
 
         tabelaJava = pd.DataFrame(columns=['Imports'])
         tabelaPython = pd.DataFrame(columns=['Imports'])

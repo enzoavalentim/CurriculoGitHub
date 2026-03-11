@@ -22,8 +22,9 @@ class Main:
     print(profilePicture)
 
     targetDev = UserData(name=user.login, email=None, photo=profilePicture)
+    targetDev.makeDirs()
 
-    #targetDev.cloningRepos(GITHUB_TOKEN, userName)
+    targetDev.cloningRepos(GITHUB_TOKEN, userName)
 
     Emails.listCommits()
     Emails.catchEmails(userNamex=user.login, displayNamex=displayName)
@@ -67,5 +68,18 @@ class Main:
     CreateGraphics.plotLinesByLanguage(targetDev)
     CreateGraphics.plotCommitsByLanguage(targetDev, GITHUB_TOKEN)
     CreateGraphics.plotAuthoringFiles(targetDev)
+
+    with open(f"txt/Name.txt", "w", encoding="utf-8") as file:
+            file.write(targetDev.name)
+    
+    with open(f"txt/Photo.txt", "w", encoding="utf-8") as file:
+            file.write(targetDev.photo)
+    
+    with open(f"txt/Email.txt", "w", encoding="utf-8") as file:
+            file.write(targetDev.email[0])
+
+
+
+
 
 

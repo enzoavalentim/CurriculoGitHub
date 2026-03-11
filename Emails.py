@@ -12,20 +12,12 @@ class Emails:
         self.emails = None
 
     def listCommits():
-     
-        caminho_base = f"gitClones" 
-
-        CLONE_DIR = "tablesEmails"
             
-        if os.path.exists(CLONE_DIR):
-            shutil.rmtree(CLONE_DIR)
-        os.makedirs(CLONE_DIR, exist_ok=True)
-
 
         repositorios = [
-            os.path.join(caminho_base, d)
-            for d in os.listdir(caminho_base)
-            if os.path.isdir(os.path.join(caminho_base, d))
+            os.path.join("gitClones", d)
+            for d in os.listdir("gitClones")
+            if os.path.isdir(os.path.join("gitClones", d))
         ]
 
         for repo_path in repositorios:
