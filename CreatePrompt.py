@@ -36,9 +36,9 @@ Response format:
 Specialization: Back-end Developer
 Skills: search algorithms, APIs, databases
 """
-            with open(f"{name}-prompt.txt", "w", encoding="utf-8") as file:
+            with open(f"txt/{name}-prompt.txt", "w", encoding="utf-8") as file:
                 file.write(prompt)
 
-                open(f"{name}-responsePrompt.txt", "w").close()
+                open(f"txt/{name}-responsePrompt.txt", "w").close()
             return 
     

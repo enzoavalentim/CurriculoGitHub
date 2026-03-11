@@ -25,6 +25,16 @@ class UserData:
         self.mainLang = None
         self.authoringFiles = None
 
+    def makeDirs(self):
+
+        dirs = ["gitClones", "importTables", "tablesDoa", "txt"]
+
+        for dir  in dirs:
+            if os.path.exists(dir):
+                shutil.rmtree(dir)
+            os.makedirs(dir, exist_ok=True)
+
+
     def getLinesAddRemov(self, github_token: str):
         listaRepos = self.createRepoList(username=self.name, github_token=github_token)
 
@@ -106,16 +116,16 @@ class UserData:
     
     def cloningRepos(self, github_token: str, username: str):
 
-        CLONE_DIR = "gitClones"
-        TABLES_DIR = "tablesDoa"
+        #CLONE_DIR = "gitClones"
+        #TABLES_DIR = "tablesDoa"
         
-        if os.path.exists(CLONE_DIR):
-            shutil.rmtree(CLONE_DIR)
-        os.makedirs(CLONE_DIR, exist_ok=True)
+        #if os.path.exists(CLONE_DIR):
+         #   shutil.rmtree(CLONE_DIR)
+        #os.makedirs(CLONE_DIR, exist_ok=True)
 
-        if os.path.exists(TABLES_DIR):
-            shutil.rmtree(TABLES_DIR)
-        os.makedirs(TABLES_DIR, exist_ok=True)
+        #if os.path.exists(TABLES_DIR):
+         #   shutil.rmtree(TABLES_DIR)
+        #os.makedirs(TABLES_DIR, exist_ok=True)
 
         g = Github(github_token)
         user = g.get_user(username)
@@ -124,7 +134,7 @@ class UserData:
 
         for repo in user.get_repos():
             try:
-                local_path = os.path.join(CLONE_DIR, repo.name)
+                local_path = os.path.join("gitClones", repo.name)
                 language = repo.language or "Unknown"
 
                 if not os.path.exists(local_path):
