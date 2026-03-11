@@ -81,6 +81,10 @@
     align-items: center;
     width: 100%;
   }
+  .avatar-area {
+    display: flex;
+    justify-content: center;
+  }
   
   .avatar-placeholder {
     width: 72px;
