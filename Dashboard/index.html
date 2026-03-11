@@ -6,20 +6,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <div class="dashboard-wrapper">
+
     <!-- SIDEBAR ESQUERDA -->
     <aside class="sidebar">
+
       <!-- FOTO, NOME, EMAIL -->
       <section class="sidebar-section">
         <div class="avatar-area">
+
           <div class="avatar-placeholder">
-            <img src="https://avatars.githubusercontent.com/u/8726738?v=4" alt="GitAvatar" class="avatar" />
+            <img id="dev-photo"
+              src="https://avatars.githubusercontent.com/u/8726738?v=4"
+              alt="GitAvatar"
+              class="avatar"
+            />
           </div>
+
           <div class="dev-info">
-            <div class="dev-name">Nome do Dev</div>
-            <div class="dev-email">email@exemplo.com</div>
+            <div class="dev-name" id="dev-name"></div>
+            <div class="dev-email" id="dev-email"></div>
           </div>
+
         </div>
       </section>
 
@@ -42,71 +52,101 @@
           Ícone da senioridade
         </div>
       </section>
+
     </aside>
 
-    <!-- ÁREA PRINCIPAL (4 QUADRANTES) -->
+    <!-- ÁREA PRINCIPAL -->
     <main class="main">
-      <!-- CANTO SUPERIOR ESQUERDO: GRÁFICO -->
+
+      <!-- GRÁFICO 1 -->
       <section class="panel" style="grid-row: 1 / 2; grid-column: 1 / 2;">
         <header class="panel-header">
           <div class="panel-title">Número de Arquivos de autoria por Linguagem</div>
         </header>
+
         <div class="panel-body">
-          <img 
-          src="../testeGrafico/graficoAuthoringFilesPorLinguagem.png"
-          alt="Gráfico 1"
-          style="width: 100%; height: 100%; object-fit: contain;"
+          <img
+            src="../testeGrafico/graficoAuthoringFilesPorLinguagem.png"
+            alt="Gráfico 1"
+            style="width:100%; height:100%; object-fit:contain;"
           />
         </div>
       </section>
 
-      <!-- CANTO SUPERIOR DIREITO: GRÁFICO -->
+      <!-- GRÁFICO 2 -->
       <section class="panel" style="grid-row: 1 / 2; grid-column: 2 / 3;">
         <header class="panel-header">
           <div class="panel-title">Número de commits por linguagem</div>
         </header>
+
         <div class="panel-body">
-          <img 
-          src="../testeGrafico/graficoCommitsPorLinguagem.png"
-          alt="Gráfico 2"
-          style="width: 100%; height: 100%; object-fit: contain;"
+          <img
+            src="../testeGrafico/graficoCommitsPorLinguagem.png"
+            alt="Gráfico 2"
+            style="width:100%; height:100%; object-fit:contain;"
           />
         </div>
       </section>
 
-      <!-- CANTO INFERIOR ESQUERDO: GRÁFICO -->
+      <!-- GRÁFICO 3 -->
       <section class="panel" style="grid-row: 2 / 3; grid-column: 1 / 2;">
         <header class="panel-header">
           <div class="panel-title">Número de linhas alteradas por linguagem</div>
         </header>
+
         <div class="panel-body">
-          <img 
-          src="../testeGrafico/graficoLinhasPorLinguagem.png"
-          alt="Gráfico 3"
-          style="width: 100%; height: 100%; object-fit: contain;"
+          <img
+            src="../testeGrafico/graficoLinhasPorLinguagem.png"
+            alt="Gráfico 3"
+            style="width:100%; height:100%; object-fit:contain;"
           />
         </div>
       </section>
 
-      <!-- CANTO INFERIOR DIREITO: INFORMAÇÕES ESCRITAS -->
+      <!-- INFORMAÇÕES DO DEV -->
       <section class="panel" style="grid-row: 2 / 3; grid-column: 2 / 3;">
         <header class="panel-header">
           <div class="panel-title">Informações do Desenvolvedor</div>
         </header>
+
         <div class="panel-body dev-info-panel">
           <div>
-            <div class="info-highlight">Especialização / Back-end Developer</div>
+
+            <div class="info-highlight">
+              Especialização / Back-end Developer
+            </div>
+
             <ul class="info-list">
-              <b><li >Skills (categorized):</li></b>
-              <li>Backend Development: Java application development, modular architecture, utility libraries              </li>
-              <li>Code Analysis & Tooling: Static code analysis with Eclipse JDT (AST parsing, visitors), metrics collection, similarity analysis              </li>
-              <li>Software Mining: Git repository mining with JGit, commit history analysis, developer activity extraction
+              <b><li>Skills (categorized):</li></b>
+
+              <li>
+                Backend Development: Java application development,
+                modular architecture, utility libraries
               </li>
+
+              <li>
+                Code Analysis & Tooling: Static code analysis with Eclipse JDT
+                (AST parsing, visitors), metrics collection, similarity analysis
+              </li>
+
+              <li>
+                Software Mining: Git repository mining with JGit,
+                commit history analysis, developer activity extraction
+              </li>
+
             </ul>
+
           </div>
         </div>
       </section>
+
     </main>
+
   </div>
+
+  <!-- SCRIPTS -->
+  <script src="dados.js"></script>
+  <script src="script.js"></script>
+
 </body>
 </html>
