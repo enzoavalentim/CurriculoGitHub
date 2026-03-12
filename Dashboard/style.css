@@ -74,17 +74,12 @@
   }
   
   /* ===== AVATAR ===== */
-  .avatar-area {
-    display: grid;
-    grid-template-columns: 72px 1fr;
-    gap: 12px;
-    align-items: center;
-    width: 100%;
-  }
-  .avatar-area {
-    display: flex;
-    justify-content: center;
-  }
+.avatar-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
   
   .avatar-placeholder {
     width: 72px;
@@ -108,9 +103,10 @@
   .dev-info {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;   /* centraliza */
     gap: 4px;
     font-size: 14px;
+    text-align: center;
   }
   
   .dev-name {
@@ -119,7 +115,7 @@
   }
   
   .dev-email {
-    font-size: 0.85rem;
+    font-size: 0.80rem;
     color: #9ca3af;
     word-break: break-all;
   }
