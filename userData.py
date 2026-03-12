@@ -25,9 +25,12 @@ class UserData:
         self.mainLang = None
         self.authoringFiles = None
 
+
     def makeDirs(self):
 
-        dirs = ["gitClones", "importTables", "tablesDoa", "txt", "tablesEmails"]
+        
+
+        dirs = ["gitClones", "importTables", "tablesDoa", "txt", "tablesEmails", "graficos"]
 
         for dir  in dirs:
             if os.path.exists(dir):
