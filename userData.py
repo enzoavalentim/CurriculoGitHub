@@ -80,6 +80,7 @@ class UserData:
         self.totalCommits = [
             {'linguagem': lang, 'totalCommits': total}
             for lang, total in commits_por_linguagem.items()
+            if total > 0
         ]
 
 
@@ -274,7 +275,7 @@ class UserData:
 
         mainLang = max(listaLang, key=listaLang.get)
         self.mainLang = mainLang
-        self.authoringFiles = listaLang
+        self.authoringFiles = {lang: total for lang, total in listaLang.items() if total > 0}
         return
 
         
