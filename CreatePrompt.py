@@ -15,8 +15,12 @@ class CreatePrompt:
             file_path = f"./importTables/{mainLang}.xlsx"
             df = pd.read_excel(file_path)
 
+            MAX_IMPORTS = 500
+
             imports_list = df["Imports"].dropna().astype(str).tolist()
-            imports_text = "\n".join(imports_list)
+            imports_list_limitada = imports_list[:MAX_IMPORTS]
+
+            imports_text = "\n".join(imports_list_limitada)
 
             prompt = f"""Analyze the following libraries and determine developer specialization, providing a concise and categorized answer.
 It is essential that in the specialization line the developer is classified as one of the following:
