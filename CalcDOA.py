@@ -43,12 +43,15 @@ class DOACalculator:
             author_email = commit.author.email
             commit_date = datetime.fromtimestamp(commit.committed_date)
 
+            extensoes_validas = (".java", ".py", ".js", ".cs", ".c", ".cpp")
+
             for file in commit.stats.files:
-                arquivoCommits[file].append({
-                    'commit': commit,
-                    'autor_nome': author_name,
-                    'autor_login': author_email,
-                    'data': commit_date
+                if file.endswith(extensoes_validas):
+                    arquivoCommits[file].append({
+                        'commit': commit,
+                        'autor_nome': author_name,
+                        'autor_login': author_email,
+                        'data': commit_date
                 })
         return arquivoCommits
 
