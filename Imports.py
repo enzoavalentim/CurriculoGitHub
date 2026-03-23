@@ -50,7 +50,7 @@ class Imports:
         tabelaJavaScript.to_excel("importTables/JavaScript.xlsx", index=False)
         tabelaC.to_excel("importTables/C.xlsx", index=False)
         tabelaCPP.to_excel("importTables/CPP.xlsx", index=False)
-        tabelaCS.to_excel("importTables/CS.xlsx", index=False)
+        tabelaCS.to_excel("importTables/C#.xlsx", index=False)
 
     @staticmethod
     def uniqueImports():
@@ -84,7 +84,7 @@ class Imports:
         javascript = pd.read_excel("importTables/JavaScript.xlsx")
         c = pd.read_excel("importTables/C.xlsx")
         cpp = pd.read_excel("importTables/CPP.xlsx")
-        cs = pd.read_excel("importTables/CS.xlsx") 
+        cs = pd.read_excel("importTables/C#.xlsx") 
       
 
         pythonStdLibs = pd.read_csv("standardLibs/standardLibsPython.csv") #Coluna Y
@@ -115,6 +115,6 @@ class Imports:
 
         #C#
         dfFiltradoCs = cs[~cs['Imports'].isin(csStdLibs['Imports'])]
-        dfFiltradoCs.to_excel('importTables/CS.xlsx', index=False)
+        dfFiltradoCs.to_excel('importTables/C#.xlsx', index=False)
 
         print("Linhas removidas com sucesso!")
