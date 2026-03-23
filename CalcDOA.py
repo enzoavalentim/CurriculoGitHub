@@ -14,9 +14,11 @@ from datetime import datetime
     
 class DOACalculator:
 
-    def __init__(self, base_path="gitClones", output_path="./tablesDoa"):
+    def __init__(self, base_path="gitClones", output_path="./tablesDoa", min_lines_threshold=5, max_files_per_commit=20):
         self.base_path = base_path
         self.output_path = output_path
+        self.min_lines_threshold = min_lines_threshold    # Mínimo de linhas alteradas para considerar autoria
+        self.max_files_per_commit = max_files_per_commit  # [NOVO] commits com mais arquivos que isso são tratados como geração automática
 
     def get_repositories(self):
         """Retorna os caminhos dos repositórios clonados."""
@@ -37,6 +39,7 @@ class DOACalculator:
 
         commits = list(repo.iter_commits())
         arquivoCommits = defaultdict(list)
+        arquivos_vistos = set()  # rastreia se o arquivo já apareceu antes
 
         for commit in reversed(commits):
             author_name = commit.author.name
@@ -45,14 +48,24 @@ class DOACalculator:
 
             extensoes_validas = (".java", ".py", ".js", ".cs", ".c", ".cpp")
 
-            for file in commit.stats.files:
+            # [NOVO] conta quantos arquivos válidos esse commit toca
+            arquivos_validos_no_commit = [f for f in commit.stats.files if f.endswith(extensoes_validas)]
+            is_bulk_commit = len(arquivos_validos_no_commit) > self.max_files_per_commit
+
+            for file, stats in commit.stats.files.items():
                 if file.endswith(extensoes_validas):
+                    is_creation_commit = file not in arquivos_vistos
+                    arquivos_vistos.add(file)
+
                     arquivoCommits[file].append({
                         'commit': commit,
                         'autor_nome': author_name,
                         'autor_login': author_email,
-                        'data': commit_date
-                })
+                        'data': commit_date,
+                        'linhas_alteradas': stats['lines'],
+                        'is_creation_commit': is_creation_commit,
+                        'is_bulk_commit': is_bulk_commit  # [NOVO] sinaliza commit de geração automática
+                    })
         return arquivoCommits
 
     def calculate_dev_stats(self, commits_info):
@@ -86,6 +99,19 @@ class DOACalculator:
             dev_doa[dev] = doa
         return dev_doa
 
+    def get_lines_per_dev(self, commits_info):
+        """Retorna o total de linhas alteradas por dev em um arquivo,
+        excluindo commits de geração automática (bulk commits) da contagem."""
+        linhas_por_dev = defaultdict(int)
+
+        for commit_info in commits_info:
+            autor = commit_info['autor_login']
+            # [ALTERADO] ignora linhas de commits onde o arquivo foi criado em massa (ex: npm install)
+            if not commit_info['is_bulk_commit']:
+                linhas_por_dev[autor] += commit_info['linhas_alteradas']
+
+        return linhas_por_dev
+
     def get_principal_author_files(self, arquivoCommits, dev_emails):
         """Retorna os arquivos em que algum dos e-mails é autor principal."""
         arquivosAutoriaAlvo = []
@@ -93,19 +119,25 @@ class DOACalculator:
         for arquivo, commits_info in arquivoCommits.items():
             dev_stats = self.calculate_dev_stats(commits_info)
             dev_doa = self.calculate_doa(dev_stats)
+            linhas_por_dev = self.get_lines_per_dev(commits_info)  # [ALTERADO] retorna só o dicionário de linhas
 
             doa_max = max(dev_doa.values())
             doa_normalizado = {dev: val / doa_max for dev, val in dev_doa.items()}
 
             for email in dev_emails:
                 if email in dev_doa:
+                    # [ALTERADO] filtro: linhas contadas apenas em commits que não sejam bulk (geração automática)
+                    # arquivos de node_modules, builds etc. terão 0 linhas válidas e serão ignorados
+                    if linhas_por_dev[email] < self.min_lines_threshold:
+                        continue
+
                     if (
                         dev_doa[email] == doa_max and
                         dev_doa[email] >= 3.293 and
                         doa_normalizado[email] >= 0.75
                     ):
                         arquivosAutoriaAlvo.append(arquivo)
-                        break  
+                        break
 
         return arquivosAutoriaAlvo
 
