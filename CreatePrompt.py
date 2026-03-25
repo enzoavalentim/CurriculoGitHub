@@ -29,6 +29,7 @@ Machine Learning Engineer, Mobile Developer, DevOps Engineer, Cloud Engineer, Se
 Application Security Engineer, Game Developer, Embedded Systems Developer, AR/VR Developer or Blockchain Developer.
 
 Disregard Java standard libraries and words like 'NAO ENCONTRADO'.
+Separate the skills with commas, not by list.
 
 Libraries:
 ***
@@ -38,11 +39,10 @@ Libraries:
 Response format:
 
 Specialization: Back-end Developer
-Skills: search algorithms, APIs, databases
+
+Skills: skill 1, skill 2, skill 3, skill 4, skill 5
 """
             with open(f"txt/{name}-prompt.txt", "w", encoding="utf-8") as file:
                 file.write(prompt)
-
-                open(f"txt/{name}-responsePrompt.txt", "w").close()
             return 
     
