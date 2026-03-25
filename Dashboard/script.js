@@ -13,3 +13,15 @@ const languageIcons = {
 
 document.getElementById("main-language-icon").innerHTML =
   languageIcons[dados.main_language];
+
+const highlight = document.querySelector(".dev-info-panel .info-highlight");
+if (highlight && dados.specialization) {
+  highlight.textContent = "Specialization:  " + dados.specialization;
+}
+ 
+const infoList = document.querySelector(".dev-info-panel .info-list");
+if (infoList && dados.skills) {
+  const skills = dados.skills.split(",").map(s => s.trim()).filter(Boolean).slice(0, 5);
+  infoList.innerHTML = skills.map(s => `<li>${s}</li>`).join("");
+}
+
