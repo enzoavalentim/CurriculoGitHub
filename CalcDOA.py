@@ -18,7 +18,7 @@ class DOACalculator:
         self.base_path = base_path
         self.output_path = output_path
         self.min_lines_threshold = min_lines_threshold    # Mínimo de linhas alteradas para considerar autoria
-        self.max_files_per_commit = max_files_per_commit  # [NOVO] commits com mais arquivos que isso são tratados como geração automática
+        self.max_files_per_commit = max_files_per_commit  # Limite de arquivos alterados para identificar commits de geração automática 
 
     def get_repositories(self):
         """Retorna os caminhos dos repositórios clonados."""
@@ -39,7 +39,7 @@ class DOACalculator:
 
         commits = list(repo.iter_commits())
         arquivoCommits = defaultdict(list)
-        arquivos_vistos = set()  # rastreia se o arquivo já apareceu antes
+        arquivos_vistos = set()  
 
         for commit in reversed(commits):
             author_name = commit.author.name
@@ -48,7 +48,7 @@ class DOACalculator:
 
             extensoes_validas = (".java", ".py", ".js", ".cs", ".c", ".cpp")
 
-            # [NOVO] conta quantos arquivos válidos esse commit toca
+            # Conta quantos arquivos válidos esse commit toca
             arquivos_validos_no_commit = [f for f in commit.stats.files if f.endswith(extensoes_validas)]
             is_bulk_commit = len(arquivos_validos_no_commit) > self.max_files_per_commit
 
@@ -64,7 +64,7 @@ class DOACalculator:
                         'data': commit_date,
                         'linhas_alteradas': stats['lines'],
                         'is_creation_commit': is_creation_commit,
-                        'is_bulk_commit': is_bulk_commit  # [NOVO] sinaliza commit de geração automática
+                        'is_bulk_commit': is_bulk_commit 
                     })
         return arquivoCommits
 
@@ -106,7 +106,7 @@ class DOACalculator:
 
         for commit_info in commits_info:
             autor = commit_info['autor_login']
-            # [ALTERADO] ignora linhas de commits onde o arquivo foi criado em massa (ex: npm install)
+
             if not commit_info['is_bulk_commit']:
                 linhas_por_dev[autor] += commit_info['linhas_alteradas']
 
@@ -119,15 +119,14 @@ class DOACalculator:
         for arquivo, commits_info in arquivoCommits.items():
             dev_stats = self.calculate_dev_stats(commits_info)
             dev_doa = self.calculate_doa(dev_stats)
-            linhas_por_dev = self.get_lines_per_dev(commits_info)  # [ALTERADO] retorna só o dicionário de linhas
+            linhas_por_dev = self.get_lines_per_dev(commits_info) 
 
             doa_max = max(dev_doa.values())
             doa_normalizado = {dev: val / doa_max for dev, val in dev_doa.items()}
 
             for email in dev_emails:
                 if email in dev_doa:
-                    # [ALTERADO] filtro: linhas contadas apenas em commits que não sejam bulk (geração automática)
-                    # arquivos de node_modules, builds etc. terão 0 linhas válidas e serão ignorados
+                    # filtro: linhas contadas apenas em commits que não sejam bulk (geração automática)
                     if linhas_por_dev[email] < self.min_lines_threshold:
                         continue
 
