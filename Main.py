@@ -6,6 +6,8 @@ from Imports import Imports
 from CreatePrompt import CreatePrompt
 from CreateGraphics import CreateGraphics
 import pandas as pd 
+import json
+
 
 class Main:
 
@@ -66,17 +68,28 @@ class Main:
 
 
     CreateGraphics.plotLinesByLanguage(targetDev)
-    CreateGraphics.plotCommitsByLanguage(targetDev, GITHUB_TOKEN)
+    CreateGraphics.plotCommitsByLanguage(targetDev)
     CreateGraphics.plotAuthoringFiles(targetDev)
 
-    with open(f"txt/Name.txt", "w", encoding="utf-8") as file:
-            file.write(targetDev.name)
-    
-    with open(f"txt/Photo.txt", "w", encoding="utf-8") as file:
-            file.write(targetDev.photo)
-    
-    with open(f"txt/Email.txt", "w", encoding="utf-8") as file:
-            file.write(targetDev.email[0])
+    print("\n" + "-=" * 40)
+    specialization = input("Cole a linha 'Specialization' da resposta da IA: ").strip()
+    skills_raw = input("Cole a linha 'Skills' da resposta da IA (separadas por vírgula): ").strip()
+
+
+    dados = {
+        "dev_name": targetDev.name,
+        "photo": targetDev.photo,
+        "email": targetDev.email[0],
+        "main_language": targetDev.mainLang,
+        "specialization": specialization,
+        "skills":         skills_raw,
+    }
+
+    dados_js = json.dumps(dados, ensure_ascii=False)
+
+    with open("Dashboard/dados.js", "w", encoding="utf-8") as f:
+        f.write(f"const dados = {dados_js};")
+
 
 
 
