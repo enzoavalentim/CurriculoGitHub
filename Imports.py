@@ -111,7 +111,7 @@ class Imports:
 
         #C++
         dfFiltradoCPP = cpp[~cpp['Imports'].isin(cppStdLibs['Imports'])]
-        dfFiltradoCPP.to_excel('importTables/CPP.xlsx', index=False)
+        dfFiltradoCPP.to_excel('importTables/C++.xlsx', index=False)
 
         #C#
         dfFiltradoCs = cs[~cs['Imports'].isin(csStdLibs['Imports'])]

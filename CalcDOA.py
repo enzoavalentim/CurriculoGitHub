@@ -36,7 +36,9 @@ class DOACalculator:
         except Exception as e:
             print(f"Erro ao abrir o repositório em {repo_path}: {e}")
             return {}
+        
 
+        print(f"Analisando repositório: {repo_path}")
         commits = list(repo.iter_commits())
         arquivoCommits = defaultdict(list)
         arquivos_vistos = set()  

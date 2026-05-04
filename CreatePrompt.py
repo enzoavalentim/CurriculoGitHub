@@ -28,7 +28,7 @@ Front-end Developer, Back-end Developer, Full-stack Developer, Data Scientist, D
 Machine Learning Engineer, Mobile Developer, DevOps Engineer, Cloud Engineer, Security Engineer,
 Application Security Engineer, Game Developer, Embedded Systems Developer, AR/VR Developer or Blockchain Developer.
 
-Disregard Java standard libraries and words like 'NAO ENCONTRADO'.
+Disregard {mainLang} standard libraries and words like 'NAO ENCONTRADO'.
 Separate the skills with commas, not by list.
 
 Libraries:
