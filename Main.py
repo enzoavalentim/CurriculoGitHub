@@ -72,16 +72,16 @@ class Main:
         CreateGraphics.plotAuthoringFiles(targetDev)
 
         print("\n" + "-=" * 40)
-        specialization = input("Cole a linha 'Specialization' da resposta da IA: ").strip()
-        skills_raw = input("Cole a linha 'Skills' da resposta da IA (separadas por vírgula): ").strip()
+        #specialization = input("Cole a linha 'Specialization' da resposta da IA: ").strip()
+        #skills_raw = input("Cole a linha 'Skills' da resposta da IA (separadas por vírgula): ").strip()
 
         dados = {
             "dev_name": targetDev.name,
             "photo": targetDev.photo,
             "email": targetDev.email[0],
             "main_language": targetDev.mainLang,
-            "specialization": specialization,
-            "skills": skills_raw,
+            "specialization": "specialization",
+            "skills": "skills_raw",
         }
 
         dados_js = json.dumps(dados, ensure_ascii=False)
@@ -92,7 +92,7 @@ class Main:
         Main.salvarNoExcel(
             nome=targetDev.name,
             linguagem=targetDev.mainLang,
-            numArquivos=len(resultados)  
+            numArquivos=targetDev.authoringFiles[targetDev.mainLang] 
         )
 
 
@@ -118,7 +118,7 @@ class Main:
 
 
 if __name__ == '__main__':
-    devList = ['johnatan-si', 'enzoavalentim']
+    devList = ['johnatan-si']
 
     for nome in devList:
         Main.curriculo(nome)
