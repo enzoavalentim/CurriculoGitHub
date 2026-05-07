@@ -49,7 +49,7 @@ class Imports:
         tabelaPython.to_excel("importTables/Python.xlsx", index=False)
         tabelaJavaScript.to_excel("importTables/JavaScript.xlsx", index=False)
         tabelaC.to_excel("importTables/C.xlsx", index=False)
-        tabelaCPP.to_excel("importTables/CPP.xlsx", index=False)
+        tabelaCPP.to_excel("importTables/C++.xlsx", index=False)
         tabelaCS.to_excel("importTables/C#.xlsx", index=False)
 
     @staticmethod
@@ -83,13 +83,13 @@ class Imports:
         java = pd.read_excel("importTables/Java.xlsx")
         javascript = pd.read_excel("importTables/JavaScript.xlsx")
         c = pd.read_excel("importTables/C.xlsx")
-        cpp = pd.read_excel("importTables/CPP.xlsx")
+        cpp = pd.read_excel("importTables/C++.xlsx")
         cs = pd.read_excel("importTables/C#.xlsx") 
       
 
         pythonStdLibs = pd.read_csv("standardLibs/standardLibsPython.csv") #Coluna Y
         cStdLibs = pd.read_csv("standardLibs/standardLibsC.csv") #Coluna Y
-        cppStdLibs = pd.read_csv("standardLibs/standardLibsCPP.csv") #Coluna Y
+        cppStdLibs = pd.read_csv("standardLibs/standardLibsC++.csv") #Coluna Y
         csStdLibs = pd.read_csv("standardLibs/standardLibsCS.csv") #Coluna Y
 
 
