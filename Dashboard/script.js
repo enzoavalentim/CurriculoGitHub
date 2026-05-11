@@ -14,37 +14,36 @@ const languageIcons = {
 document.getElementById("main-language-icon").innerHTML =
   languageIcons[dados.main_language] ?? "";
 
-// ── Senioridade ────────────────────────────────────────────────────────────
-let level = "Junior"; // valor padrão
+let level = "Junior"; 
 
 if (dados.main_language == "Java") {
   if (dados.authoringFiles <= 145)
     level = "Junior";
-  else if (dados.authoringFiles > 145 && dados.authoringFiles < 266)
+  else if (dados.authoringFiles > 145 && dados.authoringFiles <= 266)
     level = "Pleno";
   else
     level = "Senior";
 
 } else if (dados.main_language == "JavaScript") {
-  if (dados.authoringFiles <= 10)
+  if (dados.authoringFiles <= 74)
     level = "Junior";
-  else if (dados.authoringFiles > 10 && dados.authoringFiles < 100)
+  else if (dados.authoringFiles > 74 && dados.authoringFiles <= 205)
     level = "Pleno";
   else
     level = "Senior";
 
 } else if (dados.main_language == "Python") {
-  if (dados.authoringFiles <= 10)
+  if (dados.authoringFiles <= 64)
     level = "Junior";
-  else if (dados.authoringFiles > 10 && dados.authoringFiles < 100)
+  else if (dados.authoringFiles > 64 && dados.authoringFiles <= 187)
     level = "Pleno";
   else
     level = "Senior";
 
 } else if (dados.main_language == "C") {
-  if (dados.authoringFiles <= 10)
+  if (dados.authoringFiles <= 38)
     level = "Junior";
-  else if (dados.authoringFiles > 10 && dados.authoringFiles < 100)
+  else if (dados.authoringFiles > 36 && dados.authoringFiles <= 86)
     level = "Pleno";
   else
     level = "Senior";
@@ -52,7 +51,7 @@ if (dados.main_language == "Java") {
 } else if (dados.main_language == "Cpp") {
   if (dados.authoringFiles <= 10)
     level = "Junior";
-  else if (dados.authoringFiles > 10 && dados.authoringFiles < 100)
+  else if (dados.authoringFiles > 10 && dados.authoringFiles <= 100)
     level = "Pleno";
   else
     level = "Senior";
@@ -60,21 +59,19 @@ if (dados.main_language == "Java") {
 } else if (dados.main_language == "CSharp") {
   if (dados.authoringFiles <= 10)
     level = "Junior";
-  else if (dados.authoringFiles > 10 && dados.authoringFiles < 100)
+  else if (dados.authoringFiles > 10 && dados.authoringFiles <= 100)
     level = "Pleno";
   else
     level = "Senior";
 }
 
-// Atualiza o ícone de senioridade
 const senioritySlot = document.getElementById("seniority-icon");
 if (senioritySlot) {
   senioritySlot.innerHTML = `
-    <img src="icons/${level}.svg" alt="${level}" title="${level}" width="60" />
+    <img src="icons/${level}.png" alt="${level}" title="${level}" width="60" />
   `;
 }
 
-// ── Informações do desenvolvedor ───────────────────────────────────────────
 const highlight = document.querySelector(".dev-info-panel .info-highlight");
 if (highlight && dados.specialization) {
   highlight.textContent = "Specialization: " + dados.specialization;

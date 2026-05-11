@@ -128,9 +128,30 @@
     color: #9ca3af;
   }
   
-  .icon-slot {
-    width: 90px;
-    height: 90px;
+  .icon-slot-seniority {
+    width: 130px;
+    height: 130px;
+    border-radius: 18px;
+    border: 2px dashed #6b7280;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 65px;
+    padding: 6px;
+    text-transform: uppercase;
+    color: #9ca3af;
+  }
+
+  .icon-slot-seniority img,
+  .icon-slot-seniority svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+ }
+
+  .icon-slot-language {
+    width: 150px;
+    height: 130px;
     border-radius: 18px;
     border: 2px dashed #6b7280;
     display: flex;
